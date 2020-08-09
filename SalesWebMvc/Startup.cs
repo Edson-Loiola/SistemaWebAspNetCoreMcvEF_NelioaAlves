@@ -54,6 +54,7 @@ namespace SalesWebMvc
 
             app.UseMvc(routes =>
             {
+                //define a pagina padrão/index se não for passado outro caminho na rota
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
