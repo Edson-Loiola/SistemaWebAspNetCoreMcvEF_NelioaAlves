@@ -1,4 +1,5 @@
-﻿using SalesWebMvc.Data;
+﻿using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using SalesWebMvc.Data;
 using SalesWebMvc.Models;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,13 @@ namespace SalesWebMvc.Services
         {
             return _context.Seller.ToList();
         }
+
+        public void Insert(Seller obj)
+        {
+            _context.Add(obj); //função para pegar os dados do formulario e salvar no banco
+            _context.SaveChanges(); //função para confirmar a gravação dos dados no banco
+
+        }
+
     }
 }
