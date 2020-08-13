@@ -13,6 +13,7 @@ namespace SalesWebMvc.Models
         public DateTime BirthDate { get; set; }
         public double BaseSalary { get; set; }
         public Department Department { get; set; } //um vendedor possui um departamento
+        public int DepartmentId { get; set; } //essa prop vai garantir que id do departamneto não seja nulo quando cadastrar um Seller
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>(); //um vendedor possui muitas vendas
         //ICollection é um tipo de coleção mais generica
 

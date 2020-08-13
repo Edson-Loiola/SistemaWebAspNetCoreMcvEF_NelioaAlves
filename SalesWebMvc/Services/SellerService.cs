@@ -25,6 +25,7 @@ namespace SalesWebMvc.Services
 
         public void Insert(Seller obj)
         {
+            obj.Department = _context.Department.First();
             _context.Add(obj); //função para pegar os dados do formulario e salvar no banco
             _context.SaveChanges(); //função para confirmar a gravação dos dados no banco
 
