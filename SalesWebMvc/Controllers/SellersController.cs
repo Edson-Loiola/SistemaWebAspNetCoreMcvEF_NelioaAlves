@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers
@@ -12,11 +13,13 @@ namespace SalesWebMvc.Controllers
     {
 
         public readonly SellerService _sellerService;
+        public readonly DepartmentService _departmentService;
 
         //faznedo a injeção de dependência
-        public SellersController(SellerService sellerService)
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             _sellerService = sellerService;
+            _departmentService = departmentService;
         }
 
 
@@ -32,7 +35,9 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var departments = _departmentService.FindAll(); //chamando aqui e carregando o metodo FindAll
+            var viewModel = new SellerFormViewModel { Departments = departments }; //instanciando um SellerFormViewModel e passando a lista de departamentos
+            return View(viewModel); //passando o objeto para view, quando a tela de cadastro for chamada já estará populada com os objetos
 
         }
 
