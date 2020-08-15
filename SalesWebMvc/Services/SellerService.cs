@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using SalesWebMvc.Data;
 using SalesWebMvc.Models;
+using SalesWebMvc.Services.Excpetions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,31 @@ namespace SalesWebMvc.Services
             _context.SaveChanges();
 
         }
+
+
+        //metofo update
+        public void Update(Seller obj)
+        {
+            //pra atualizar um objeto o id desse objeto já precisa existir no banco
+            if (!_context.Seller.Any(x => x.Id == obj.Id)) // verifica se expressão passada não existe no banco
+            {
+                throw new NotFoundException("Id not found");
+            }
+
+            try
+            {
+            _context.Update(obj); //atualiza o objeto
+            _context.SaveChanges(); //confirmar alteração
+            }
+            catch (DbConcurrencyException e)
+            {
+
+                throw new DbConcurrencyException(e.Message);
+                //exception de acesso a dados capturadas pelo serviço 
+            }
+        }
+
+
 
         //Essa classe SalesWebMvcContext presica ser registrado no Startup.cs no sistema de injeção de dependencia no metodo ConfigureService
     }

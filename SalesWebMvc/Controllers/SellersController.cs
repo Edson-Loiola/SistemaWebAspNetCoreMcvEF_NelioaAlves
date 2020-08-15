@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
+using SalesWebMvc.Services.Excpetions;
 
 namespace SalesWebMvc.Controllers
 {
@@ -92,6 +94,55 @@ namespace SalesWebMvc.Controllers
             }
 
             return View(obj);
+        }
+        
+
+        //ação para abrir tele edit
+        public IActionResult Edit(int? id)
+        {
+            if (id == null) //validação se o id é nulo
+            {
+                return NotFound(); 
+            }
+            var obj = _sellerService.FindById(id.Value);
+
+            if (obj == null) // valida se o obj no banco é nulo
+            {
+                return NotFound();
+            }
+
+            List<Department> departments = _departmentService.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel{ Seller = obj, Departments = departments };
+
+            return View(viewModel);
+
+        }
+
+        //ação edit -metodo post
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Seller seller)
+        {
+            if (id != seller.Id) //verifica se o Id é diferente
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _sellerService.Update(seller);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (DbConcurrencyException)
+            {
+                return BadRequest();
+            }
+           
+
         }
 
 

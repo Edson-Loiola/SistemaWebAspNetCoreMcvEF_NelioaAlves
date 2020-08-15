@@ -1,0 +1,61 @@
+﻿
+
+@model SalesWebMvc.Models.ViewModels.SellerFormViewModel
+@*  com essa declaração minha viewm tem um objeto Seller a disposição  *@
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Seller</h4>
+<hr />
+<div class="row">
+    @*  esse div row ocupa a largura da rela  *@
+    <div class="col-md-4">
+        @* md-4 ocupa um 1/4 da tela *@
+        <form asp-action="Edit">
+            @*chama ação Edit metodo post*@
+
+            <input type="hidden" asp-for="Seller.Id" /> @*campo oculto passando o id do vendedor*@
+
+            @*  Esse Create é o metodo post para e*@
+            <div class="form-group">
+
+                @*  o compilador consegue entender que o "Name" é um atributo do objeto Seller *@
+                <label asp-for="Seller.Name" class="control-label"></label>
+                <input asp-for="Seller.Name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                @*  o compilador consegue entender que o "Email" é um atributo do objeto Seller *@
+                <label asp-for="Seller.Email" class="control-label"></label>
+                <input asp-for="Seller.Email" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Seller.BirthDate" class="control-label"></label>
+                <input asp-for="Seller.BirthDate" class="form-control" />
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Seller.BaseSalary" class="control-label"></label>
+                <input asp-for="Seller.BaseSalary" class="form-control" />
+            </div>
+
+
+            @*componente que cria caixa de selaçã do departamento*@
+            <div class="form-group">
+                <label asp-for="Seller.DepartmentId" class="control-label"></label>
+                <select asp-for="Seller.DepartmentId" asp-items="@(new SelectList(Model.Departments,"Id","Name"))" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+
+        </form>
+    </div>
+</div>
