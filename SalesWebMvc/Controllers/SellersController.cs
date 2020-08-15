@@ -44,11 +44,38 @@ namespace SalesWebMvc.Controllers
         //inserir dados no banco
         [HttpPost] //esse método é um post pois está criando/enviando um novo objeto
         [ValidateAntiForgeryToken] //essa notação evita que a aplicação receba ataques CSRF (envio de dados malicioso na autenticação)
-        public IActionResult Create (Seller seller)
+        public IActionResult Create(Seller seller)
         {
-            _sellerService.Insert(seller);            
+            _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index)); //ao clicar em criar um novo Seller, direciona para a index
-        
+
+        }
+
+
+        //ainda não é o delete post
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellerService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            _sellerService.Remove(id); //chamando o metodo remove 
+            return RedirectToAction(nameof(Index)); 
         }
     }
+
 }
