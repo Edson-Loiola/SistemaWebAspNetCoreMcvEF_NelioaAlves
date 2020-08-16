@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
@@ -59,13 +61,13 @@ namespace SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new {message ="Id not provided" });
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
             return View(obj);
@@ -84,13 +86,13 @@ namespace SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
             return View(obj);
@@ -102,13 +104,13 @@ namespace SalesWebMvc.Controllers
         {
             if (id == null) //validação se o id é nulo
             {
-                return NotFound(); 
+                return RedirectToAction(nameof(Error), new { message = "Id not provide" });
             }
             var obj = _sellerService.FindById(id.Value);
 
             if (obj == null) // valida se o obj no banco é nulo
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
             List<Department> departments = _departmentService.FindAll();
@@ -125,7 +127,7 @@ namespace SalesWebMvc.Controllers
         {
             if (id != seller.Id) //verifica se o Id é diferente
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id mismath" });
             }
 
             try
@@ -133,18 +135,28 @@ namespace SalesWebMvc.Controllers
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (ApplicationException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            catch (DbConcurrencyException)
-            {
-                return BadRequest();
-            }
-           
+                    
+            //alterado esses dois cath por apenas 1 passando a super classe ApplicationException
 
         }
 
+        public IActionResult Error(string message)
+        {
+            //ação error
+            //objeto view model
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier //macete do framework para pegar o id interno da requisão
+            };
+
+            return View(viewModel); //retornar o view modo como argumento
+
+        }
 
 
     }
