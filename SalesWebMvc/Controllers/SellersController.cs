@@ -39,6 +39,7 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Create()
         {
+
             var departments = _departmentService.FindAll(); //chamando aqui e carregando o metodo FindAll
             var viewModel = new SellerFormViewModel { Departments = departments }; //instanciando um SellerFormViewModel e passando a lista de departamentos
             return View(viewModel); //passando o objeto para view, quando a tela de cadastro for chamada já estará populada com os objetos
@@ -50,6 +51,15 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken] //essa notação evita que a aplicação receba ataques CSRF (envio de dados malicioso na autenticação)
         public IActionResult Create(Seller seller)
         {
+
+            //essa validação ocorrerá se o JavaScript do usuário estiver desabilitado, pois não fará as validações feitas no html e nas propriedades
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll(); //carrega os departamentos
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index)); //ao clicar em criar um novo Seller, direciona para a index
 
@@ -125,6 +135,16 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
+
+            //essa validação ocorrerá se o JavaScript do usuário estiver desabilitado, pois não fará as validações feitas no html e nas propriedades
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll(); //carrega os departamentos
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
+
             if (id != seller.Id) //verifica se o Id é diferente
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismath" });
