@@ -1,4 +1,5 @@
-﻿using SalesWebMvc.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Data;
 using SalesWebMvc.Models;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,16 @@ namespace SalesWebMvc.Services
         }
 
         //metodo que retorna todos os departamentos
-        public List<Department> FindAll()
+        public async Task<List<Department>> FindAllAsync()
         {
-            return _context.Department.OrderBy(d => d.Name).ToList();
+            return await _context.Department.OrderBy(d => d.Name).ToListAsync();
+
+            //ToListAsync é do framework.
+            /*Operação sincrona: minha aplicação fica bloqueada e esperando essa operação terminar para depois continuar executando.
+            Então em operações mais lentas de acesso a dados disco ou rede nós fazemos operações assíncronas de modo que essa operação executa separadamente 
+            e a aplicação continua disponível*/
+
+
         }
 
 
