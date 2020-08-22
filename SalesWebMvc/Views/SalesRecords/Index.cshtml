@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Sales Records";
+}
+
+@*Tela de vendas - exutar ação de busca simples*@
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-6">
+
+        @*O SimpleSerach é a ação que vai ser chamada do controlador e executada por esse form*@
+        <form class="form-horizontal" asp-action="SimpleSearch">
+
+            <fieldset>
+                <legend>Simple search</legend>
+                <div class="form-group">
+                    @*caixa caixa de busca*@
+                    <label for="minDate" class="col-lg-2 control-label">Min Date</label> entrad minDate
+                    <div class="col-lg-10">
+                        <input type="date" name="minDate" class="form-control" /> @*entrada de data minima*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="maxDate" class="col-lg-2 control-label">Max Date</label> @*entrada de data máxima*@
+                    <div class="col-lg-10">
+                        <input type="date" name="maxDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>  @*botão de enviar o form e chamar a ação do controlado*@
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+
+@*Tela de vendas - exutar ação de busca por grupo*@
+<div class="row">
+    <div class="col-md-6">
+
+        @*O SimpleSerach é a ação que vai ser chamada do controlador e executada por esse form*@
+        <form class="form-horizontal" asp-action="GroupingSearch">
+            <fieldset>
+                <legend>Grouping search</legend>
+                <div class="form-group">
+                    <label for="minDate" class="col-lg-2 control-label">Min Date</label> @*entrada de data minima*@
+                    <div class="col-lg-10">
+                        <input type="date" name="minDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="maxDate" class="col-lg-2 control-label">Max Date</label> @*entrada de data máxima*@
+                    <div class="col-lg-10">
+                        <input type="date" name="maxDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
